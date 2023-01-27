@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.cache.annotation.Cacheable;
-
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -71,7 +69,7 @@ public class UploadController {
                 HttpStatus.OK);
     }
 
-    @Cacheable(key="#primarykey", value="record")
+
     @GetMapping("/get-csv-file/{primarykey}")
     public ResponseEntity<String> getCSVFileByPrimarKey(@PathVariable("primarykey") Integer primarykey) {
         Optional<Record> record;
@@ -86,7 +84,7 @@ public class UploadController {
         return ResponseEntity.accepted().body(record.toString());
     }
 
-    @Cacheable(key="#primarykey", value="record")
+
     @DeleteMapping("/delete-csv-file/{primarykey}")
     public ResponseEntity<String> deleteCSVFileByPrimarKey(@PathVariable("primarykey") String primarykey) {
         try {
