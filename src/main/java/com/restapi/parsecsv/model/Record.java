@@ -5,14 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-//import org.springframework.data.redis.core.RedisHash;
+
 
 @Data
 @NoArgsConstructor
-@Entity
-//@RedisHash("Record")
+@Entity(name = "record")
 public class Record {
-
     @CsvBindByName
     private long primary_key;
     @CsvBindByName
@@ -38,6 +36,4 @@ public class Record {
         return primary_key;
     }
 
-
-// getters and setters removed for the sake of brevity
 }

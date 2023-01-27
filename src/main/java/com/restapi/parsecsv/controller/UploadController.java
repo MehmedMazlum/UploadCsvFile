@@ -3,7 +3,6 @@ package com.restapi.parsecsv.controller;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.restapi.parsecsv.exception.CsvDeleteFileException;
 import com.restapi.parsecsv.exception.CsvGetFileException;
 import com.restapi.parsecsv.exception.CsvUploadFileException;
 import com.restapi.parsecsv.model.Record;
@@ -16,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.cache.annotation.Cacheable;
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,6 +31,14 @@ import static java.util.Collections.unmodifiableList;
 public class UploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
+    private static final String UPLOADING_ERROR = "Error occurred while uploading the file";
+    private static final String UPLOADING_EXCEPTION = "Exception occurs when upload-csv-file uplading...";
+    private static final String UPLOADING_EMPTY_FILE = "Your file is empty";
+    private static final String UPLOADING_COMPLETED = "Upload csv file is completed";
+    private static final String GET_FILE_EXCEPTION = "Error occurred while getting the file";
+    private static final String DELETED_FILE_EXCEPTION = "Exception occurs when csv file deleting";
+    private static final String DELETED_COMPLETED = "Deleted csv file is completed ";
+
 
     @Resource
     RecordRepository recordRepository;
@@ -37,7 +46,7 @@ public class UploadController {
     @PostMapping("/upload-csv-file")
     public ResponseEntity<String> uploadCSVFile(@RequestParam("file") MultipartFile file) throws CsvUploadFileException {
         if (file.isEmpty()) {
-            logger.info("Your file is empty");
+            logger.info(UPLOADING_EMPTY_FILE);
         } else {
             // parse CSV file to create a list of `Record` objects
             try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
@@ -53,43 +62,41 @@ public class UploadController {
                 // TODO: save users in DB
                 recordRepository.saveAll(unmodifiableList(items));
             } catch (Exception ex) {
-                logger.info("exception occurs");
-                throw new CsvUploadFileException("Error occurred while uploading the file",ex);
+                logger.info(UPLOADING_EXCEPTION);
+                throw new CsvUploadFileException(UPLOADING_ERROR, ex);
             }
         }
         return new ResponseEntity<>(
-                "Upload csv file is completed ",
+                UPLOADING_COMPLETED,
                 HttpStatus.OK);
     }
 
-
+    @Cacheable(key="#primarykey", value="record")
     @GetMapping("/get-csv-file/{primarykey}")
-    public ResponseEntity<?> getCSVFileByPrimarKey(@PathVariable("primarykey") Integer primarykey) throws CsvGetFileException{
+    public ResponseEntity<String> getCSVFileByPrimarKey(@PathVariable("primarykey") Integer primarykey) {
         Optional<Record> record;
         try {
-             record = recordRepository.findById(primarykey);
-             if (record.isEmpty())
-                 throw new CsvGetFileException("Error occurred while getting the file");
+            record = recordRepository.findById(primarykey);
+            if (record.isEmpty())
+                throw new CsvGetFileException(GET_FILE_EXCEPTION);
         } catch (Exception ex) {
-            logger.info("exception occurs");
-            return new ResponseEntity<>("Error occurred while getting the file", HttpStatus.NOT_FOUND);
-            //throw new CsvGetFileException("Error occurred while getting the file",ex);
+            logger.info(ex.getLocalizedMessage());
+            return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.accepted().body(record.orElseThrow());
+        return ResponseEntity.accepted().body(record.toString());
     }
 
-
-    @DeleteMapping("/delete-csv-file")
-    public ResponseEntity<String> deleteCSVFileByPrimarKey(@RequestParam("primarykey") String primarykey)  throws CsvDeleteFileException{
+    @Cacheable(key="#primarykey", value="record")
+    @DeleteMapping("/delete-csv-file/{primarykey}")
+    public ResponseEntity<String> deleteCSVFileByPrimarKey(@PathVariable("primarykey") String primarykey) {
         try {
             recordRepository.deleteById(Integer.valueOf(primarykey));
         } catch (Exception ex) {
-            logger.info("exception occurs when csv file deleting");
-            return new ResponseEntity<>("Error occurred while deleting the file", HttpStatus.BAD_REQUEST);
-           // throw new CsvDeleteFileException("Error occurred while deleting file",ex);
+            logger.info(DELETED_FILE_EXCEPTION);
+            return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(
-                "Deleted csv file is completed ",
+                DELETED_COMPLETED,
                 HttpStatus.OK);
     }
 }

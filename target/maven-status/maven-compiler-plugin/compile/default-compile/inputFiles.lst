@@ -1,0 +1,8 @@
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/ParsecsvApplication.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/repository/RecordRepository.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/exception/CsvGetFileException.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/model/Record.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/configuration/RedisConfiiguration.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/exception/CsvDeleteFileException.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/controller/UploadController.java
+/home/mehmet/Desktop/files/Test task/UploadCsvFile/src/main/java/com/restapi/parsecsv/exception/CsvUploadFileException.java

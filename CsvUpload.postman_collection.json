@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "f8fb1977-35a2-4c64-9ed0-88d7fd6748d0",
+		"name": "CsvUpload",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "4056039"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/upload-csv-file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/mehmet/Desktop/files/Test task/parsecsv/file.csv"
+						}
+					]
+				},
+				"url": "http://localhost:8080/upload-csv-file"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/upload-csv-file Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/get-csv-file?primarykey=10000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"get-csv-file"
+					],
+					"query": [
+						{
+							"key": "primarykey",
+							"value": "10000000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/upload-csv-file Copy 2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/delete-csv-file?primarykey=10000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"delete-csv-file"
+					],
+					"query": [
+						{
+							"key": "primarykey",
+							"value": "10000000"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

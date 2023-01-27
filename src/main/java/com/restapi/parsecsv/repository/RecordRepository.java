@@ -7,5 +7,4 @@ import com.restapi.parsecsv.model.Record;
 
 @Repository
 public interface RecordRepository extends CrudRepository<Record,Integer> {
-
 }
